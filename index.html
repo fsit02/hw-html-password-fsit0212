@@ -3,6 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<!----------------------------->
+<!-- 最新編譯和最佳化的 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+<!-- 選擇性佈景主題 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+<!-- 最新編譯和最佳化的 JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+ <!-- ---------------------------->
+ 
 <script src="js/jquery.js"></script>
 <script src="js/seedrandom.js"></script>
 <style>
@@ -10,34 +21,68 @@
     font-family: monospace;
     font-size: 2.0em;
 }
+body {
+  background-image:url("images/paper.gif");
+} 
+div{
+  position: relative;
+  left: 20px;
+}
+
 </style>
 </head>
 <body>
+	
 
-請輸入亂數表的編號：<input type="text" id="txtSeed" value="1234" />
-&nbsp;<input type="button" id="btnGo" value="產生亂數表" />
+<H3>請輸入亂數表的編號：<input type="text" id="txtSeed" value="1234" />
+&nbsp;<input type="button" id="btnGo" value="產生亂數表" class="btn btn-lg btn-danger" />                     <!-- &nbsp 是啥? -->
+</H3>
+<H4>
+  <form id ="passWord">
+    <label><input type="radio" name="radioGroup" id="radioA" value="65"/> 純數字</label><br>
+    <label><input type="radio" name="radioGroup" id="radioB" value="66" checked="checked"/> 數字+小寫字母: (去除 l, o)</label><br>
+    <label><input type="radio" name="radioGroup" id="radioC" value="67"/> 數字+大小寫字母: (去除 I, O, l, o)<label>
+  </form>
+</H4>
 
+<!--<div id="debug">...</div>-->
 <div id="randomTable">
 </div>
 
 <script>
-
+var form = document.getElementById("passWord");
 $("#btnGo").click(function () {
+    var poolSelect = "";
     var result = "";
-	// 純數字:
-	var sPool = "0123456789";
-    // 數字+小寫字母: (去除 l, o)
-    // var sPool = "abcdefghijkmnpqrstuvwxyz0123456789";
-    // 數字+大小寫字母: (去除 I, O, l, o)
-    // var sPool = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789";
+	var sPool = ["0123456789",
+	             "abcdefghijkmnpqrstuvwxyz0123456789",
+	             "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789"];
+// 	// 純數字:
+// 	var sPool = "0123456789";
+//     // 數字+小寫字母: (去除 l, o)
+//     var sPool = "abcdefghijkmnpqrstuvwxyz0123456789";
+//     // 數字+大小寫字母: (去除 I, O, l, o)
+//     var sPool = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789";
+
+    //取得radio的值
+    
+    for (var i=0; i<form.radioGroup.length; i++)
+        {
+          if (form.radioGroup[i].checked)
+          {
+              poolSelect += sPool[i];
+              break;
+          }
+        }
+    // $("#debug").html(poolSelect);
 
     Math.seedrandom($("#txtSeed").val()); // 設定亂數種子
 	var iRandom = 0; var ch = "?";
 	for (iRow = 1; iRow <= 10; iRow++) {
 		var sLine = (iRow + 100).toString().substr(1, 2) + ": ";
 		for (iCol = 1; iCol <= 10; iCol++) {
-			iRandom = Math.floor(Math.random() * sPool.length);
-			ch = sPool.substr(iRandom, 1);
+			iRandom = Math.floor(Math.random() * poolSelect.length);
+			ch = poolSelect.substr(iRandom, 1);
 			sLine += ch;
 		}
 		result += sLine + "<br>";
